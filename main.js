@@ -1,9 +1,9 @@
 'use strict'
 
-// const leftArrow = keyboard(37);
-// const upArrow = keyboard(38);
-// const rightArrow = keyboard(39);
-// const downArrow = keyboard(40);
+const leftArrow = keyboard(37);
+const upArrow = keyboard(38);
+const rightArrow = keyboard(39);
+const downArrow = keyboard(40);
 
 //Aliases
 let Application = PIXI.Application,
@@ -37,22 +37,24 @@ function loadProgressHandler(loader, resource) {
 
 let tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009, tex;
 const tiles = [tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009];
+let tile12;
+const speed = 32;
+let canMove = true;
+const WIDTH = 160;
+const HEIGHT = 144;
 
 //This `setup` function will run when the image has loaded
 function setup() {
 
   tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
-
   // tiles[0] = new Sprite(tex["tile000" + ".png"]);
   // app.stage.addChild(tiles[0]);
 
   //init sprites
   for (let i = 0; i < tiles.length; i++) {
-    tiles[i] = new Sprite(tex["tile00" + i.toString() + ".png"]);
     // console.log(tiles[i]);
-    
-    // tiles[i].x = i * 32;
-    // tiles[i].y = (i * 32) % 4;
+    // tiles[i].x = (i % 4) * 32;
+    // tiles[i].y = (i) * 32 ;
     // app.stage.addChild(tiles[i]);
   }
 
@@ -60,22 +62,18 @@ function setup() {
   for (let x = 0; x < 160; x += 32) {
     for (let y = 0; y < 144; y += 32) {
 
-      // console.log(parseInt(app.stage.width));
-      // console.log(parseInt(app.stage.height));
-      
-
       let n = Math.floor(Math.random() * tiles.length);
-      console.log(x,y,n);
-      
-      let tile = tiles[n];
-
+      let tile = new Sprite(tex["tile00" + n.toString() + ".png"]);
       tile.x = x;
       tile.y = y;
-      app.stage.addChild(tiles[n]);
-
+      app.stage.addChild(tile);
     }
   }
 
+  tile12 = new Sprite(tex["tile012.png"]);
+  tile12.x = 0;
+  tile12.y = 0;
+  app.stage.addChild(tile12);
 
   //Start the game loop 
   app.ticker.add(delta => gameLoop(delta));
@@ -83,6 +81,30 @@ function setup() {
 
 function gameLoop(delta) {
 
+
+  if (rightArrow.isDown && canMove && tile12.x < WIDTH-32) {
+    tile12.x += speed;
+    canMove = false;
+  }
+
+  if (leftArrow.isDown && canMove && tile12.x > 0) {
+    tile12.x -= speed;
+    canMove = false;
+  }
+
+  if (upArrow.isDown && canMove &&  tile12.y > 0 ) {
+    tile12.y -= speed;
+    canMove = false;
+  }
+
+  if (downArrow.isDown && canMove &&tile12.y < HEIGHT-32) {
+    tile12.y += speed;
+    canMove = false;
+  }
+
+  if (rightArrow.isUp && leftArrow.isUp && upArrow.isUp && downArrow.isUp) {
+    canMove = true;
+  }
   //Move the cat 1 pixel 
   // tile000.x += 1;
 
