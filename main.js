@@ -1,5 +1,10 @@
 'use strict'
 
+// const leftArrow = keyboard(37);
+// const upArrow = keyboard(38);
+// const rightArrow = keyboard(39);
+// const downArrow = keyboard(40);
+
 //Aliases
 let Application = PIXI.Application,
   loader = PIXI.loader,
@@ -8,9 +13,9 @@ let Application = PIXI.Application,
 
 //Create a Pixi Application
 let app = new Application({
-  width: 400,
-  height: 300,
-  antialias: false,
+  width: 160,
+  height: 144,
+  antialias: true,
   transparent: false,
   resolution: 1
 }
@@ -21,45 +26,66 @@ document.body.appendChild(app.view);
 
 //load an image and run the `setup` function when it's done
 loader
-  .add("./sprites/tilesetOeste.jpg")
+  .add("/sprites/tileset_desert.json")
   .on("progress", loadProgressHandler)
   .load(setup);
 
-function loadProgressHandler() {
-  console.log("loading");
+function loadProgressHandler(loader, resource) {
+  console.log("loading: " + resource.url);
+  console.log("progress: " + loader.progress + "%");
 }
+
+let tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009, tex;
+const tiles = [tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009];
 
 //This `setup` function will run when the image has loaded
 function setup() {
 
-  //Create the `tileset` sprite from the texture
-  let texture = PIXI.utils.TextureCache["./sprites/tilesetOeste.jpg"];
+  tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
 
-  //Create a rectangle object that defines the position and
-  //size of the sub-image you want to extract from the texture
-  //(`Rectangle` is an alias for `PIXI.Rectangle`)
-  let rectangle = new PIXI.Rectangle(28, 28, 28, 28);
+  // tiles[0] = new Sprite(tex["tile000" + ".png"]);
+  // app.stage.addChild(tiles[0]);
 
-  //Tell the texture to use that rectangular section
-  texture.frame = rectangle;
+  //init sprites
+  for (let i = 0; i < tiles.length; i++) {
+    tiles[i] = new Sprite(tex["tile00" + i.toString() + ".png"]);
+    // console.log(tiles[i]);
+    
+    // tiles[i].x = i * 32;
+    // tiles[i].y = (i * 32) % 4;
+    // app.stage.addChild(tiles[i]);
+  }
 
-  //Create the sprite from the texture
-  let rocket = new Sprite(texture);
+  //tilemap
+  for (let x = 0; x < 160; x += 32) {
+    for (let y = 0; y < 144; y += 32) {
 
-  //Position the rocket sprite on the canvas
-  rocket.x = app.renderer.width / 2;
-  rocket.y = app.renderer.height / 2;
+      // console.log(parseInt(app.stage.width));
+      // console.log(parseInt(app.stage.height));
+      
 
-  for (let x = 0; x < app.renderer.width; x++) {
-    for (let y = 0; x < app.renderer.height; y++) {
+      let n = Math.floor(Math.random() * tiles.length);
+      console.log(x,y,n);
+      
+      let tile = tiles[n];
+
+      tile.x = x;
+      tile.y = y;
+      app.stage.addChild(tiles[n]);
 
     }
   }
 
-  //Add the rocket to the stage
-  app.stage.addChild(rocket);
 
-  //Render the stage   
-  app.renderer.render(app.stage);
+  //Start the game loop 
+  app.ticker.add(delta => gameLoop(delta));
 }
 
+function gameLoop(delta) {
+
+  //Move the cat 1 pixel 
+  // tile000.x += 1;
+
+  //Optionally use the `delta` value
+  // tile000.x += 1 + delta;
+}
