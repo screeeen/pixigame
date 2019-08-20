@@ -44,9 +44,9 @@ const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, message, hp, healthBar, innerBar, outerBar, state;
-// let play,interlude,end;
-
+let gameScene, interludeScene, gameOverScene, message, hp;
+let healthBar, innerBar, outerBar, state;
+let roomCount = 0;
 
 //This `setup` function will run when the image has loaded
 function setup() {
@@ -78,6 +78,49 @@ function setup() {
   gameScene.addChild(bg);
 
   tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
+  reset();
+  //Create the health bar
+  healthBar = new PIXI.Container();
+  healthBar.position.set(0, 0)
+  gameScene.addChild(healthBar); //gamescene isntead of stage??
+
+  //Create the black background rectangle
+  innerBar = new PIXI.Graphics();
+  innerBar.beginFill(0x000000);
+  innerBar.drawRect(0, 130, 160, 32);
+  innerBar.endFill();
+  healthBar.addChild(innerBar);
+
+  //Create the front red rectangle
+  outerBar = new PIXI.Graphics();
+  outerBar.beginFill(0x0000FF);
+  outerBar.drawRect(0, 130, 160, 32);
+  outerBar.endFill();
+  healthBar.addChild(outerBar);
+
+  healthBar.outer = outerBar;
+  outerBar.width = hp;
+
+  message = new PIXI.Text('HEALTH', { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'right' });
+  message.x = 5;
+  message.y = 130;
+  gameScene.addChild(message);
+
+  message = new PIXI.Text('ROOM: ' + roomCount, { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
+  message.x = interludeScene.width / 2;
+  message.y = interludeScene.height / 2;
+  interludeScene.addChild(message);
+
+  //Set the game state
+  state = play;
+
+  //Start the game loop 
+  app.ticker.add(delta => gameLoop(delta));
+}
+
+function reset() {
+
+  roomCount++;
 
   //tilemap
   for (let x = 0; x < 160; x += 32) {
@@ -119,43 +162,6 @@ function setup() {
   gameScene.addChild(player);
 
 
-  //Create the health bar
-  healthBar = new PIXI.Container();
-  healthBar.position.set(0, 0)
-  gameScene.addChild(healthBar); //gamescene isntead of stage??
-
-  //Create the black background rectangle
-  innerBar = new PIXI.Graphics();
-  innerBar.beginFill(0x000000);
-  innerBar.drawRect(0, 130, 160, 32);
-  innerBar.endFill();
-  healthBar.addChild(innerBar);
-
-  //Create the front red rectangle
-  outerBar = new PIXI.Graphics();
-  outerBar.beginFill(0x0000FF);
-  outerBar.drawRect(0, 130, 160, 32);
-  outerBar.endFill();
-  healthBar.addChild(outerBar);
-
-  healthBar.outer = outerBar;
-  outerBar.width = hp;
-
-  message = new PIXI.Text('HEALTH', { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'right' });
-  message.x = 5;
-  message.y = 130;
-  gameScene.addChild(message);
-
-  message = new PIXI.Text('NEXT ROOM...', { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
-  message.x = interludeScene.width / 2;
-  message.y = interludeScene.height / 2;
-  interludeScene.addChild(message);
-
-  //Set the game state
-  state = play;
-
-  //Start the game loop 
-  app.ticker.add(delta => gameLoop(delta));
 }
 
 function gameLoop(delta) {
@@ -202,7 +208,7 @@ function play(delta) {
 function interlude() {
   if (leftArrow.isDown) {
     console.log("fuck");
-    
+
     reNewRoom();
   }
 }
@@ -236,16 +242,17 @@ function updateBar() {
 function reNewRoom() {
   switch (state.name) {
     case ("play"):
-        state = interlude;
-        interludeScene.visible = true;
-        gameOverScene.visible = false;
-        gameScene.visible = false;
+      state = interlude;
+      reset();
+      interludeScene.visible = true;
+      gameOverScene.visible = false;
+      gameScene.visible = false;
       break;
     case ("interlude"):
-        state = play;
-        interludeScene.visible = false;
-        gameOverScene.visible = false;
-        gameScene.visible = true;
+      state = play;
+      interludeScene.visible = false;
+      gameOverScene.visible = false;
+      gameScene.visible = true;
       break;
   }
 }
