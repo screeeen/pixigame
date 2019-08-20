@@ -44,7 +44,7 @@ const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, message, hp;
+let gameScene, interludeScene, gameOverScene, splashScene, message, splashText, hp;
 let healthBar, innerBar, outerBar, state;
 let roomCount;
 
@@ -59,11 +59,16 @@ function setup() {
   interludeScene = new Container();
   app.stage.addChild(interludeScene);
 
+  splashScene = new Container();
+  app.stage.addChild(splashScene);
+
 
   gameOverScene = new Container();
   app.stage.addChild(gameOverScene);
 
+  splashScene.visible = true;
   interludeScene.visible = false;
+  gameScene.visible = false;
   gameOverScene.visible = false;
 
   let style = new TextStyle({
@@ -72,29 +77,22 @@ function setup() {
     fill: "white"
   });
 
-  var bg = new PIXI.Sprite(PIXI.Texture.WHITE);
-  bg.width = 160;
-  bg.height = 184;
-  bg.tint = 0xFFFFFF;
-  gameScene.addChild(bg);
-
   tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
 
+  //reset the desert room
   reset();
 
-  //Create the health bar
+  //health bar
   healthBar = new PIXI.Container();
   healthBar.position.set(0, 0)
   gameScene.addChild(healthBar); //gamescene isntead of stage??
 
-  //Create the black background rectangle
   innerBar = new PIXI.Graphics();
   innerBar.beginFill(0x000000);
   innerBar.drawRect(0, 130, 160, 32);
   innerBar.endFill();
   healthBar.addChild(innerBar);
 
-  //Create the front red rectangle
   outerBar = new PIXI.Graphics();
   outerBar.beginFill(0x0000FF);
   outerBar.drawRect(0, 130, 160, 32);
@@ -109,98 +107,34 @@ function setup() {
   message.y = 130;
   gameScene.addChild(message);
 
+  //interlude room
   message = new PIXI.Text('ROOM: ' + roomCount, { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
-  message.x = interludeScene.width / 2;
-  message.y = interludeScene.height / 2;
+  message.x = app.stage.width / 2;
+  message.y = app.stage.height / 2;
   interludeScene.addChild(message);
 
+  //splash room
+  splashText = new PIXI.Text('WELCOME', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'center ' });
+  splashText.x = app.stage.width / 2;
+  splashText.y = app.stage.height / 2;
+  splashScene.addChild(splashText);
+
+
   //Set the game state
-  state = play;
+  state = splash;
 
   //Start the game loop 
   app.ticker.add(delta => gameLoop(delta));
 }
 
-function reset() {
-
-  //tilemap
-  for (let x = 0; x < 160; x += 32) {
-    for (let y = 0; y < 128; y += 32) {
-      if (x == 0 && y === 0) continue;
-      if (x === 128 && y === 96) continue;
-
-
-      let n = Math.floor(Math.random() * 10);
-      if (n === 4) {
-        tileC = new Sprite(tex["tile00" + n.toString() + ".png"]);
-        tileC.tint = Math.random() * 0xFFFFFF;
-        tilesCollision.push(tileC);
-        tileC.x = x;
-        tileC.y = y;
-        gameScene.addChild(tileC);
-      } else {
-        tile = new Sprite(tex["tile00" + n.toString() + ".png"]);
-        tile.x = x;
-        tile.y = y;
-        gameScene.addChild(tile);
-      }
-    }
-  }
-  enter = new Sprite(tex["tile014.png"]);
-  enter.scale.x = -1;
-  enter.x = 32;
-  enter.y = 0;
-  gameScene.addChild(enter);
-
-  exit = new Sprite(tex["tile014.png"]);
-  exit.x = 128;
-  exit.y = 96;
-  gameScene.addChild(exit);
-
-  player = new Sprite(tex["tile012.png"]);
-  player.x = 0;
-  player.y = 0;
-  gameScene.addChild(player);
-}
-
 function gameLoop(delta) {
-
   //Update the current game state:
   state(delta);
 }
 
-function play(delta) {
-
-  if (canMove && player.x < WIDTH - 32 && rightArrow.isDown) {
-    player.x += speed;
-    canMove = false;
-    if (checkTile(player.x, player.y)) decreaseLife(); updateBar();
-    if (boxesIntersect(player, exit)) reNewRoom();
-  }
-
-  if (leftArrow.isDown && canMove && player.x > 0) {
-    player.x -= speed
-    canMove = false;
-    if (checkTile(player.x, player.y)) decreaseLife();
-    if (boxesIntersect(player, exit)) reNewRoom();
-  }
-
-  if (upArrow.isDown && canMove && player.y > 0) {
-    player.y -= speed;
-    canMove = false;
-    if (checkTile(player.x, player.y)) decreaseLife();
-    if (boxesIntersect(player, exit)) reNewRoom();
-  }
-
-  if (downArrow.isDown && canMove && player.y < HEIGHT - 32) {
-    player.y += speed;
-    canMove = false;
-    if (checkTile(player.x, player.y)) decreaseLife();
-    if (boxesIntersect(player, exit)) reNewRoom();
-  }
-
-  if (rightArrow.isUp && leftArrow.isUp && upArrow.isUp && downArrow.isUp) {
-    canMove = true;
+function splash() {
+  if (leftArrow.isDown) {
+    startGame();
   }
 }
 
@@ -210,35 +144,21 @@ function interlude() {
   }
 }
 
-
-function checkTile(x, y) {
-  let col;
-  tilesCollision.forEach(function tileCPrint(tileCol) {
-    // console.log(tileCol._texture.textureCacheIds[0], tileCol.x, tileCol.y);
-    console.log("-----");
-
-    if (tilesCollision.length > 0 && boxesIntersect(player, tileCol)) {
-      console.log("YES:", x, y, "|", tileCol.x, tileCol.y, boxesIntersect(player, tileCol));
-      col = true;
-    } else {
-      // console.log("NO:", x, y, "|", tileCol.x, tileCol.y);
-      col = false;
-    }
-  })
-  return col;
+function startGame() {
+  reset();
+  state = play;
+  interludeScene.visible = false;
+  gameOverScene.visible = false;
+  splashScene.visible = false;
+  gameScene.visible = true;
 }
 
-function decreaseLife() {
-  hp -= 30;
-}
-
-function updateBar() {
-  outerBar.width = hp;
-}
-
-function updateRoomCount() {
-  roomCount++;
-  message.text = 'ROOM: ' + roomCount;
+function gameOver() {
+  state = gameOver;
+  interludeScene.visible = false;
+  gameOverScene.visible = true;
+  splashScene.visible = false;
+  gameScene.visible = false;
 }
 
 function reNewRoom() {
@@ -259,36 +179,6 @@ function reNewRoom() {
       break;
   }
 }
-
-function boxesIntersect(a, b) {
-  var ab = a.getBounds();
-  var bb = b.getBounds();
-  return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function hitTestRectangle(r1, r2) {
 
@@ -340,3 +230,12 @@ function hitTestRectangle(r1, r2) {
   //`hit` will be either `true` or `false`
   return hit;
 };
+
+
+
+
+// function boxesIntersect(a, b) {
+//   var ab = a.getBounds();
+//   var bb = b.getBounds();
+//   return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
+// }
