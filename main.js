@@ -46,12 +46,13 @@ const WIDTH = 160;
 const HEIGHT = 128;
 let gameScene, interludeScene, gameOverScene, message, hp;
 let healthBar, innerBar, outerBar, state;
-let roomCount = 0;
+let roomCount;
 
 //This `setup` function will run when the image has loaded
 function setup() {
 
   hp = 132;
+  roomCount = 0;
   gameScene = new Container();
   app.stage.addChild(gameScene);
 
@@ -78,7 +79,9 @@ function setup() {
   gameScene.addChild(bg);
 
   tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
+
   reset();
+
   //Create the health bar
   healthBar = new PIXI.Container();
   healthBar.position.set(0, 0)
@@ -120,8 +123,6 @@ function setup() {
 
 function reset() {
 
-  roomCount++;
-
   //tilemap
   for (let x = 0; x < 160; x += 32) {
     for (let y = 0; y < 128; y += 32) {
@@ -160,8 +161,6 @@ function reset() {
   player.x = 0;
   player.y = 0;
   gameScene.addChild(player);
-
-
 }
 
 function gameLoop(delta) {
@@ -207,8 +206,6 @@ function play(delta) {
 
 function interlude() {
   if (leftArrow.isDown) {
-    console.log("fuck");
-
     reNewRoom();
   }
 }
@@ -239,16 +236,22 @@ function updateBar() {
   outerBar.width = hp;
 }
 
+function updateRoomCount() {
+  roomCount++;
+  message.text = 'ROOM: ' + roomCount;
+}
+
 function reNewRoom() {
   switch (state.name) {
     case ("play"):
+      updateRoomCount()
       state = interlude;
-      reset();
       interludeScene.visible = true;
       gameOverScene.visible = false;
       gameScene.visible = false;
       break;
     case ("interlude"):
+      reset();
       state = play;
       interludeScene.visible = false;
       gameOverScene.visible = false;
@@ -262,6 +265,25 @@ function boxesIntersect(a, b) {
   var bb = b.getBounds();
   return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
