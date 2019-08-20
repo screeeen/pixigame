@@ -25,6 +25,7 @@ function keyboard(keyCode) {
     }
     event.preventDefault();
   };
+  
 
   //Attach event listeners
   window.addEventListener(
