@@ -5,6 +5,14 @@ const upArrow = keyboard(38);
 const rightArrow = keyboard(39);
 const downArrow = keyboard(40);
 
+const key_uno = keyboard(50);
+const key_dos = keyboard(51);
+const key_tres = keyboard(52);
+const key_cuatro = keyboard(53);
+
+
+
+
 //Aliases
 let Application = PIXI.Application,
   loader = PIXI.loader,
@@ -44,7 +52,7 @@ const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, splashScene, message, splashText, hp;
+let gameScene, interludeScene, gameOverScene, splashScene, message, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar, state;
 let roomCount;
 
@@ -113,11 +121,24 @@ function setup() {
   message.y = app.stage.height / 2;
   interludeScene.addChild(message);
 
+
   //splash room
-  splashText = new PIXI.Text('WELCOME', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'center ' });
-  splashText.x = app.stage.width / 2;
-  splashText.y = app.stage.height / 2;
+  splashText = new PIXI.Text('WELCOME', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'left' });
   splashScene.addChild(splashText);
+  splashText.x = 12;
+  splashText.y = 64;
+
+  splashText = new PIXI.Text('Press left arrow \nto start the quest', { fontFamily: 'Arial', fontSize: 14, fill: 0xffffff, align: 'left' });
+  splashScene.addChild(splashText);
+  splashText.x = 12;
+  splashText.y = 96;
+
+  //game over room
+  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'left' });
+  gameOverScene.addChild(gameOverText);
+  gameOverText.x = 12;
+  gameOverText.y = 64;
+
 
 
   //Set the game state
@@ -130,17 +151,31 @@ function setup() {
 function gameLoop(delta) {
   //Update the current game state:
   state(delta);
+
+  switcher(); // TOOL
+
+  if (rightArrow.isUp && leftArrow.isUp && upArrow.isUp && downArrow.isUp) {
+    canMove = true;
+  }
+}
+
+function switcher() {
+  key_uno.isDown ? startGame() : null;
+  key_dos.isDown ? reNewRoom() : null;
+  key_cuatro.isDown ? gameOver() : null;
 }
 
 function splash() {
-  if (leftArrow.isDown) {
+  if (leftArrow.isDown && canMove) {
     startGame();
+    canMove = false;
   }
 }
 
 function interlude() {
-  if (leftArrow.isDown) {
+  if (leftArrow.isDown && canMove) {
     reNewRoom();
+    canMove = false;
   }
 }
 
@@ -159,6 +194,10 @@ function gameOver() {
   gameOverScene.visible = true;
   splashScene.visible = false;
   gameScene.visible = false;
+  if (leftArrow.isDown && canMove) {
+    reNewRoom();
+    canMove = false;
+  }
 }
 
 function reNewRoom() {
@@ -177,6 +216,14 @@ function reNewRoom() {
       gameOverScene.visible = false;
       gameScene.visible = true;
       break;
+    case ("gameOver"):
+      state = splash;
+      interludeScene.visible = false;
+      gameOverScene.visible = false;
+      gameScene.visible = false;
+      splashScene.visible = true
+      break;
+
   }
 }
 
