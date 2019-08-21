@@ -11,7 +11,7 @@ function reset() {
       let n = Math.floor(Math.random() * 10);
       if (n === 4 || n===5 || n===6) {
         tileC = new Sprite(tex["tile00" + n.toString() + ".png"]);
-        tileC.tint = Math.random() * 0xFFFFFF;
+        // tileC.tint = Math.random() * 0xFFFFFF;
         tilesCollision.push(tileC);
         tileC.x = x;
         tileC.y = y;

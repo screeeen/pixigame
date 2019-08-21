@@ -52,7 +52,7 @@ const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, splashScene, message, splashText, gameOverText, hp;
+let gameScene, interludeScene, gameOverScene, splashScene, message,gameOverTextCaption, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar, state;
 let roomCount;
 
@@ -116,7 +116,7 @@ function setup() {
   gameScene.addChild(message);
 
   //interlude room
-  message = new PIXI.Text('ROOM: ' + roomCount, { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
+  message = new PIXI.Text('Day: ' + roomCount, { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
   message.x = app.stage.width / 2;
   message.y = app.stage.height / 2;
   interludeScene.addChild(message);
@@ -138,6 +138,11 @@ function setup() {
   gameOverScene.addChild(gameOverText);
   gameOverText.x = 12;
   gameOverText.y = 64;
+
+  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'Arial', fontSize: 12, fill: 0xffffff, align: 'left' });
+  gameOverScene.addChild(gameOverTextCaption);
+  gameOverTextCaption.x = 12;
+  gameOverTextCaption.y = 96;
 
 
 
@@ -192,6 +197,7 @@ function startGame() {
 
 function gameOver() {
   state = gameOver;
+  gameOverTextCaption.text = 'You survived ' + roomCount + ' Days.';
   interludeScene.visible = false;
   gameOverScene.visible = true;
   splashScene.visible = false;

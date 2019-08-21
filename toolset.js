@@ -10,7 +10,7 @@ function updateBar() {
 
 function updateRoomCount() {
   roomCount++;
-  message.text = 'ROOM: ' + roomCount;
+  message.text = 'DAY ' + roomCount;
 }
 
 function checkHP() {
