@@ -41,8 +41,6 @@ loader
   .load(setup);
 
 function loadProgressHandler(loader, resource) {
-  console.log("loading: " + resource.url);
-  console.log("progress: " + loader.progress + "%");
 }
 
 let tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009, tex;
@@ -52,7 +50,7 @@ const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, splashScene, message,gameOverTextCaption, splashText, gameOverText, hp;
+let gameScene, interludeScene, gameOverScene, splashScene, message, gameOverTextCaption, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar, state;
 let roomCount;
 
@@ -237,21 +235,13 @@ function reNewRoom() {
 
 function checkTile(x, y) {
   let col = false;
-  console.log("-----");
   let counter = 0
   tilesCollision.forEach(function tileCPrint(tileCol) {
-    // console.log(tileCol._texture.textureCacheIds[0], tileCol.x, tileCol.y);
     counter++;
-    console.log("count", counter,tileCol.x,tileCol.y);
 
-    if (tilesCollision.length > 0 && hitTestRectangle(player,tileCol)) {
-      console.log("YES:", x, y, "|", tileCol.x, tileCol.y, hitTestRectangle(player, tileCol));
+    if (tilesCollision.length > 0 && hitTestRectangle(player, tileCol)) {
       col = true;
-    } 
-    // else {
-    //    console.log("NO:", x, y, "|", tileCol.x, tileCol.y);
-    //   col = false;
-    // }
+    }
   })
   return col;
 }
