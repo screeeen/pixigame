@@ -46,7 +46,7 @@ function loadProgressHandler(loader, resource) {
 }
 
 let tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009, tex;
-const tilesCollision = [];
+let tilesCollision = [];
 let player, enter, exit, tile, tileC;
 const speed = 32;
 let canMove = true;
@@ -181,6 +181,8 @@ function interlude() {
 
 function startGame() {
   reset();
+  hp = 132;
+  updateBar();
   state = play;
   interludeScene.visible = false;
   gameOverScene.visible = false;
@@ -225,6 +227,27 @@ function reNewRoom() {
       break;
 
   }
+}
+
+function checkTile(x, y) {
+  let col = false;
+  console.log("-----");
+  let counter = 0
+  tilesCollision.forEach(function tileCPrint(tileCol) {
+    // console.log(tileCol._texture.textureCacheIds[0], tileCol.x, tileCol.y);
+    counter++;
+    console.log("count", counter,tileCol.x,tileCol.y);
+
+    if (tilesCollision.length > 0 && hitTestRectangle(player,tileCol)) {
+      console.log("YES:", x, y, "|", tileCol.x, tileCol.y, hitTestRectangle(player, tileCol));
+      col = true;
+    } 
+    // else {
+    //    console.log("NO:", x, y, "|", tileCol.x, tileCol.y);
+    //   col = false;
+    // }
+  })
+  return col;
 }
 
 function hitTestRectangle(r1, r2) {

@@ -1,5 +1,6 @@
 function reset() {
-
+  tilesCollision = [];
+  
   //tilemap
   for (let x = 0; x < 160; x += 32) {
     for (let y = 0; y < 128; y += 32) {
