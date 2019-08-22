@@ -1,39 +1,5 @@
 'use strict'
 
-const leftArrow = keyboard(37);
-const upArrow = keyboard(38);
-const rightArrow = keyboard(39);
-const downArrow = keyboard(40);
-
-const key_uno = keyboard(50);
-const key_dos = keyboard(51);
-const key_tres = keyboard(52);
-const key_cuatro = keyboard(53);
-
-
-
-
-//Aliases
-let Application = PIXI.Application,
-  loader = PIXI.loader,
-  resources = PIXI.loader.resources,
-  Sprite = PIXI.Sprite,
-  Container = PIXI.Container,
-  TextStyle = PIXI.TextStyle;
-
-//Create a Pixi Application
-let app = new Application({
-  width: 160,
-  height: 144,
-  antialias: true,
-  transparent: false,
-  resolution: 1
-}
-);
-
-//Add the canvas that Pixi automatically created for you to the HTML document
-document.body.appendChild(app.view);
-
 //load an image and run the `setup` function when it's done
 loader
   .add("/sprites/tileset_desert.json")
@@ -43,21 +9,9 @@ loader
 function loadProgressHandler(loader, resource) {
 }
 
-let tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009, tex;
-let tilesCollision = [];
-let player, enter, exit, tile, tileC;
-const speed = 32;
-let canMove = true;
-const WIDTH = 160;
-const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, splashScene, message, gameOverTextCaption, splashText, gameOverText, hp;
-let healthBar, innerBar, outerBar, state;
-let roomCount;
-
 //This `setup` function will run when the image has loaded
 function setup() {
 
-  hp = 132;
   roomCount = 0;
   gameScene = new Container();
   app.stage.addChild(gameScene);
@@ -85,9 +39,6 @@ function setup() {
 
   tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
 
-  //reset the desert room
-  reset();
-
   //health bar
   healthBar = new PIXI.Container();
   healthBar.position.set(0, 0)
@@ -95,13 +46,13 @@ function setup() {
 
   innerBar = new PIXI.Graphics();
   innerBar.beginFill(0x000000);
-  innerBar.drawRect(0, 130, 160, 32);
+  innerBar.drawRect(0, 130, 80, 32,2);
   innerBar.endFill();
   healthBar.addChild(innerBar);
 
   outerBar = new PIXI.Graphics();
   outerBar.beginFill(0x0000FF);
-  outerBar.drawRect(0, 130, 160, 32);
+  outerBar.drawRect(0, 130, 80, 32,2);
   outerBar.endFill();
   healthBar.addChild(outerBar);
 
@@ -113,12 +64,37 @@ function setup() {
   message.y = 130;
   gameScene.addChild(message);
 
+  // TIMEBAR
+  timeBar = new PIXI.Container();
+  timeBar.position.set(80, 0)
+  gameScene.addChild(timeBar); //gamescene isntead of stage??
+
+  innerTimeBar = new PIXI.Graphics();
+  innerTimeBar.beginFill(0x000000);
+  innerTimeBar.drawRect(0, 130, 160, 32);
+  innerTimeBar.endFill();
+  timeBar.addChild(innerTimeBar);
+
+  outerTimeBar = new PIXI.Graphics();
+  outerTimeBar.beginFill(0xFF0000);
+  outerTimeBar.drawRect(0, 130, 160, 32);
+  outerTimeBar.endFill();
+  timeBar.addChild(outerTimeBar);
+
+  timeBar.outer = outerTimeBar;
+  outerTimeBar.width = timeDown;
+
+  messageTimeBar = new PIXI.Text('TIME', { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'right' });
+  messageTimeBar.x = 85;
+  messageTimeBar.y = 130;
+  gameScene.addChild(messageTimeBar);
+
+
   //interlude room
   message = new PIXI.Text('Day: ' + roomCount, { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
   message.x = app.stage.width / 2;
   message.y = app.stage.height / 2;
   interludeScene.addChild(message);
-
 
   //splash room
   splashText = new PIXI.Text('WELCOME', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'left' });
@@ -141,8 +117,6 @@ function setup() {
   gameOverScene.addChild(gameOverTextCaption);
   gameOverTextCaption.x = 12;
   gameOverTextCaption.y = 96;
-
-
 
   //Set the game state
   state = splash;
@@ -184,8 +158,8 @@ function interlude() {
 
 function startGame() {
   reset();
-  hp = 132;
-  updateBar();
+  hp = 80;
+  updateHPBar();
   state = play;
   interludeScene.visible = false;
   gameOverScene.visible = false;
@@ -211,6 +185,8 @@ function reNewRoom() {
     case ("play"):
       updateRoomCount()
       state = interlude;
+      // ticker.stop();
+
       interludeScene.visible = true;
       gameOverScene.visible = false;
       gameScene.visible = false;
@@ -233,75 +209,25 @@ function reNewRoom() {
   }
 }
 
-function checkTile(x, y) {
-  let col = false;
-  let counter = 0
-  tilesCollision.forEach(function tileCPrint(tileCol) {
-    counter++;
+function stopWatch(){
 
-    if (tilesCollision.length > 0 && hitTestRectangle(player, tileCol)) {
-      col = true;
+  const intervalId = setInterval(function() {
+    timeDown--;
+    console.log("Day ends in " + timeDown);
+    if (timeDown === 0) {
+      clearInterval(intervalId);
     }
-  })
-  return col;
+  }, time);
 }
-
-function hitTestRectangle(r1, r2) {
-
-  //Define the variables we'll need to calculate
-  let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
-
-  //hit will determine whether there's a collision
-  hit = false;
-
-  //Find the center points of each sprite
-  r1.centerX = r1.x + r1.width / 2;
-  r1.centerY = r1.y + r1.height / 2;
-  r2.centerX = r2.x + r2.width / 2;
-  r2.centerY = r2.y + r2.height / 2;
-
-  //Find the half-widths and half-heights of each sprite
-  r1.halfWidth = r1.width / 2;
-  r1.halfHeight = r1.height / 2;
-  r2.halfWidth = r2.width / 2;
-  r2.halfHeight = r2.height / 2;
-
-  //Calculate the distance vector between the sprites
-  vx = r1.centerX - r2.centerX;
-  vy = r1.centerY - r2.centerY;
-
-  //Figure out the combined half-widths and half-heights
-  combinedHalfWidths = r1.halfWidth + r2.halfWidth;
-  combinedHalfHeights = r1.halfHeight + r2.halfHeight;
-
-  //Check for a collision on the x axis
-  if (Math.abs(vx) < combinedHalfWidths) {
-
-    //A collision might be occurring. Check for a collision on the y axis
-    if (Math.abs(vy) < combinedHalfHeights) {
-
-      //There's definitely a collision happening
-      hit = true;
-    } else {
-
-      //There's no collision on the y axis
-      hit = false;
-    }
-  } else {
-
-    //There's no collision on the x axis
-    hit = false;
-  }
-
-  //`hit` will be either `true` or `false`
-  return hit;
-};
+  
 
 
 
-
-// function boxesIntersect(a, b) {
-//   var ab = a.getBounds();
-//   var bb = b.getBounds();
-//   return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
+// function animate(time) {
+//     ticker.update(time);
+//     console.log(time);
+    
+//     // renderer.render(stage);
+//     requestAnimationFrame(animate);
 // }
+

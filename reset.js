@@ -1,6 +1,10 @@
 function reset() {
   tilesCollision = [];
-  
+
+  time = 1000;
+  timeDown = 10;
+  stopWatch();
+
   //tilemap
   for (let x = 0; x < 160; x += 32) {
     for (let y = 0; y < 128; y += 32) {
@@ -9,7 +13,7 @@ function reset() {
 
 
       let n = Math.floor(Math.random() * 10);
-      if (n === 4 || n===5 || n===6) {
+      if (n === 4 || n === 5 || n === 6) {
         tileC = new Sprite(tex["tile00" + n.toString() + ".png"]);
         // tileC.tint = Math.random() * 0xFFFFFF;
         tilesCollision.push(tileC);
@@ -24,6 +28,7 @@ function reset() {
       }
     }
   }
+  
   enter = new Sprite(tex["tile014.png"]);
   enter.scale.x = -1;
   enter.x = 32;

@@ -1,11 +1,13 @@
 function play(delta) {
+  
+  updateTimeBar();
 
   if (canMove && player.x < WIDTH - 32 && rightArrow.isDown) {
     canMove = false;
     player.x += speed;
     if (checkTile(player.x, player.y)) {
       decreaseLife();
-      updateBar();
+      updateHPBar();
       checkHP();
     }
     if (hitTestRectangle(player, exit)) reNewRoom();
@@ -16,7 +18,7 @@ function play(delta) {
     player.x -= speed
     if (checkTile(player.x, player.y)) {
       decreaseLife();
-      updateBar();
+      updateHPBar();
       checkHP();
     }
     if (hitTestRectangle(player, exit)) reNewRoom();
@@ -27,7 +29,7 @@ function play(delta) {
     player.y -= speed;
     if (checkTile(player.x, player.y)) {
       decreaseLife();
-      updateBar();
+      updateHPBar();
       checkHP();
     }
     if (hitTestRectangle(player, exit)) reNewRoom();
@@ -38,7 +40,7 @@ function play(delta) {
     player.y += speed;
     if (checkTile(player.x, player.y)) {
       decreaseLife();
-      updateBar();
+      updateHPBar();
       checkHP();
     }
     if (hitTestRectangle(player, exit)) reNewRoom();
