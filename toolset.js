@@ -1,7 +1,13 @@
 
 
+function checkIfTimeOver() {
+  if (timeDown < 1) {
+    gameOver();
+  }
+}
+
 function decreaseLife() {
-  hp -= 20 ;
+  hp -= 20;
   // player.alpha = .5;
 }
 

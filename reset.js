@@ -1,6 +1,6 @@
 function reset() {
   tilesCollision = [];
-
+  
   time = 1000;
   timeDown = 10;
   stopWatch();

@@ -25,7 +25,7 @@ let app = new Application({
   height: 144,
   antialias: true,
   transparent: false,
-  resolution: 1
+  resolution: 2
 }
 );
 //Add the canvas that Pixi automatically created for you to the HTML document
@@ -38,9 +38,14 @@ const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
-let gameScene, interludeScene, gameOverScene, splashScene, message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
+let background;
+let gameScene, interludeScene, gameOverScene, splashScene;
+let message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar;
 let timeBar, innerTimeBar, outerTimeBar;
 let roomCount,state;
 let iniTime;
 let timeDown;
+
+
+

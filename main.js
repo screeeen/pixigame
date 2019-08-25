@@ -5,7 +5,7 @@ loader
   .add("/sprites/tileset_desert.json")
   .on("progress", loadProgressHandler)
   .load(setup);
-
+  
 function loadProgressHandler(loader, resource) {
 }
 
@@ -59,7 +59,7 @@ function setup() {
   healthBar.outer = outerBar;
   outerBar.width = hp;
 
-  message = new PIXI.Text('HEALTH', { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'right' });
+  message = new PIXI.Text('HEALTH', { fontFamily: 'gbfont', fontSize: 10, fill: 0xffffff, align: 'right' });
   message.x = 5;
   message.y = 130;
   gameScene.addChild(message);
@@ -84,37 +84,53 @@ function setup() {
   timeBar.outer = outerTimeBar;
   outerTimeBar.width = timeDown;
 
-  messageTimeBar = new PIXI.Text('TIME', { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'right' });
+  messageTimeBar = new PIXI.Text('TIME', { fontFamily: 'gbfont', fontSize: 10, fill: 0xffffff, align: 'right' });
   messageTimeBar.x = 85;
   messageTimeBar.y = 130;
   gameScene.addChild(messageTimeBar);
 
 
   //interlude room
-  message = new PIXI.Text('Day: ' + roomCount, { fontFamily: 'Arial', fontSize: 10, fill: 0xffffff, align: 'center' });
-  message.x = app.stage.width / 2;
-  message.y = app.stage.height / 2;
+  message = new PIXI.Text('Day: ' + roomCount, { fontFamily: 'gbfont', fontSize: 10, fill: 0xffffff, align: 'center' });
+  message.x = 12;
+  message.y = 64;
   interludeScene.addChild(message);
 
   //splash room
-  splashText = new PIXI.Text('WELCOME', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'left' });
+  background = new PIXI.Graphics();
+  background.beginFill(0x62e678);
+  background.drawRect(0, 0, 160, 144);
+  background.endFill();
+  splashScene.addChild(background);
+
+  splashText = new PIXI.Text('welcome', { fontFamily: "gbfont", fontSize: 12, fill: 0xffffff, align: 'left' });
   splashScene.addChild(splashText);
+  splashText.tint='0x222222';
   splashText.x = 12;
   splashText.y = 64;
 
-  splashText = new PIXI.Text('Press left arrow \nto start the quest', { fontFamily: 'Arial', fontSize: 14, fill: 0xffffff, align: 'left' });
+  splashText = new PIXI.Text('Press left arrow \nto start the quest', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
   splashScene.addChild(splashText);
+  splashText.tint='0x222222';
   splashText.x = 12;
   splashText.y = 96;
 
   //game over room
-  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'Arial', fontSize: 18, fill: 0xffffff, align: 'left' });
+  background = new PIXI.Graphics();
+  background.beginFill(0x62e678);
+  background.drawRect(0, 0, 160, 144);
+  background.endFill();
+  gameOverScene.addChild(background);
+
+  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0xffffff, align: 'left' });
   gameOverScene.addChild(gameOverText);
+  gameOverText.tint='0x222222';
   gameOverText.x = 12;
   gameOverText.y = 64;
 
-  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'Arial', fontSize: 12, fill: 0xffffff, align: 'left' });
+  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
   gameOverScene.addChild(gameOverTextCaption);
+  gameOverTextCaption.tint='0x222222';
   gameOverTextCaption.x = 12;
   gameOverTextCaption.y = 96;
 
@@ -160,6 +176,7 @@ function startGame() {
   reset();
   hp = 80;
   updateHPBar();
+  roomCount = 0;
   state = play;
   interludeScene.visible = false;
   gameOverScene.visible = false;
@@ -214,8 +231,9 @@ function stopWatch(){
   const intervalId = setInterval(function() {
     timeDown--;
     console.log("Day ends in " + timeDown);
-    if (timeDown === 0) {
+    if (timeDown < 0) {
       clearInterval(intervalId);
+      
     }
   }, time);
 }

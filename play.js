@@ -1,6 +1,7 @@
 function play(delta) {
   
   updateTimeBar();
+  checkIfTimeOver();
 
   if (canMove && player.x < WIDTH - 32 && rightArrow.isDown) {
     canMove = false;

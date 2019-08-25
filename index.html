@@ -6,6 +6,12 @@
 </head>
   <script src="./pixi/pixi.min.js"></script>
 <body>
+  <style>
+  @font-face {
+  font-family: "gbfont";
+  src: url('./sprites/gbfont.ttf') format("truetype")
+}</style>
+
   <h1>hola</h1>
   <script type="text/javascript">
     let type = "WebGL"
@@ -16,6 +22,7 @@
     PIXI.utils.sayHello(type)
   </script>
   <script src="./input.js"></script>
+  <script src="./fontjs/Font.js"></script>
   <script src="./globalVars.js"></script>
   <script src="./reset.js"></script>
   <script src="./toolset.js"></script>
