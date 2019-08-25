@@ -103,13 +103,13 @@ function setup() {
   background.endFill();
   splashScene.addChild(background);
 
-  splashText = new PIXI.Text('welcome', { fontFamily: "gbfont", fontSize: 12, fill: 0xffffff, align: 'left' });
+  splashText = new PIXI.Text('Very small \n adventure', { fontFamily: "gbfont", fontSize: 12, fill: 0xffffff, align: 'left' });
   splashScene.addChild(splashText);
   splashText.tint='0x222222';
   splashText.x = 12;
   splashText.y = 64;
 
-  splashText = new PIXI.Text('Press start', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
+  splashText = new PIXI.Text('Press \'a\' to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
   splashScene.addChild(splashText);
   splashText.tint='0x222222';
   splashText.x = 12;
@@ -153,9 +153,9 @@ function gameLoop(delta) {
 }
 
 function switcher() {
-  key_uno.isDown ? startGame() : null;
-  key_dos.isDown ? reNewRoom() : null;
-  key_cuatro.isDown ? gameOver() : null;
+  key_uno.isDown ? u.shake(player, 15, false)  : null;
+  key_dos.isDown ? console.log("p"): null;
+  // key_cuatro.isDown ? gameOver() : null;
 }
 
 function splash() {
@@ -232,7 +232,6 @@ function stopWatch(){
     timeDown--;
     if (timeDown < 0) {
       clearInterval(intervalId);
-      
     }
   }, time);
 }
