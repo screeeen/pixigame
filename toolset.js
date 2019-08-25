@@ -8,7 +8,7 @@ function checkIfTimeOver() {
 
 function decreaseLife() {
   hp -= 20;
-  // player.alpha = .5;
+  player.tint = '0xff000';
 }
 
 function updateHPBar() {
@@ -17,6 +17,7 @@ function updateHPBar() {
 
 function updateTimeBar() {
   outerTimeBar.width = timeDown * 8;
+
 }
 
 function updateRoomCount() {
@@ -32,6 +33,7 @@ function checkTile(x, y) {
   let col = false;
   let counter = 0
   player.alpha = 1;
+  player.tint = '0xffffff';
 
   tilesCollision.forEach(function tileCPrint(tileCol) {
     counter++;

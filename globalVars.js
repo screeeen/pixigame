@@ -3,6 +3,8 @@ const leftArrow = keyboard(37);
 const upArrow = keyboard(38);
 const rightArrow = keyboard(39);
 const downArrow = keyboard(40);
+const a_key = keyboard(65);
+const s_key = keyboard(83);
 
 //only debug
 const key_uno = keyboard(50);

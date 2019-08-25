@@ -109,7 +109,7 @@ function setup() {
   splashText.x = 12;
   splashText.y = 64;
 
-  splashText = new PIXI.Text('Press left arrow \nto start the quest', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
+  splashText = new PIXI.Text('Press start', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
   splashScene.addChild(splashText);
   splashText.tint='0x222222';
   splashText.x = 12;
@@ -147,7 +147,7 @@ function gameLoop(delta) {
 
   switcher(); // TOOL
 
-  if (rightArrow.isUp && leftArrow.isUp && upArrow.isUp && downArrow.isUp) {
+  if (rightArrow.isUp && leftArrow.isUp && upArrow.isUp && downArrow.isUp && a_key.isUp) {
     canMove = true;
   }
 }
@@ -159,16 +159,16 @@ function switcher() {
 }
 
 function splash() {
-  if (leftArrow.isDown && canMove) {
-    startGame();
+  if (a_key.isDown && canMove) {
     canMove = false;
+    startGame();
   }
 }
 
 function interlude() {
-  if (leftArrow.isDown && canMove) {
-    reNewRoom();
+  if (a_key.isDown && canMove) {
     canMove = false;
+    reNewRoom();
   }
 }
 
@@ -191,9 +191,9 @@ function gameOver() {
   gameOverScene.visible = true;
   splashScene.visible = false;
   gameScene.visible = false;
-  if (leftArrow.isDown && canMove) {
-    reNewRoom();
+  if (a_key.isDown && canMove) {
     canMove = false;
+    reNewRoom();
   }
 }
 
@@ -230,13 +230,23 @@ function stopWatch(){
 
   const intervalId = setInterval(function() {
     timeDown--;
-    console.log("Day ends in " + timeDown);
     if (timeDown < 0) {
       clearInterval(intervalId);
       
     }
   }, time);
 }
+
+// function blink(){
+// var blinking_time=100;
+//   const intervalId = setInterval(function() {
+//     timeDown--;
+//     if (a_key.isDown < 0) {
+//       clearInterval(intervalId);
+      
+//     }
+//   }, blinking_time);
+// }
   
 
 
