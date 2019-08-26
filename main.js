@@ -2,7 +2,7 @@
 
 //load an image and run the `setup` function when it's done
 loader
-  .add("/sprites/tileset_desert.json")
+  .add("./sprites/tileset_desert.json")
   .on("progress", loadProgressHandler)
   .load(setup);
   
@@ -31,13 +31,7 @@ function setup() {
   gameScene.visible = false;
   gameOverScene.visible = false;
 
-  let style = new TextStyle({
-    fontFamily: "Futura",
-    fontSize: 64,
-    fill: "white"
-  });
-
-  tex = PIXI.loader.resources["/sprites/tileset_desert.json"].textures;
+  tex = PIXI.loader.resources["./sprites/tileset_desert.json"].textures;
 
   //health bar
   healthBar = new PIXI.Container();
@@ -45,13 +39,13 @@ function setup() {
   gameScene.addChild(healthBar); //gamescene isntead of stage??
 
   innerBar = new PIXI.Graphics();
-  innerBar.beginFill(0x000000);
+  innerBar.beginFill(0x060f08);
   innerBar.drawRect(0, 130, 80, 32,2);
   innerBar.endFill();
   healthBar.addChild(innerBar);
 
   outerBar = new PIXI.Graphics();
-  outerBar.beginFill(0x0000FF);
+  outerBar.beginFill(0x62e678);
   outerBar.drawRect(0, 130, 80, 32,2);
   outerBar.endFill();
   healthBar.addChild(outerBar);
@@ -70,13 +64,13 @@ function setup() {
   gameScene.addChild(timeBar); //gamescene isntead of stage??
 
   innerTimeBar = new PIXI.Graphics();
-  innerTimeBar.beginFill(0x000000);
+  innerTimeBar.beginFill(0x060f08);
   innerTimeBar.drawRect(0, 130, 160, 32);
   innerTimeBar.endFill();
   timeBar.addChild(innerTimeBar);
 
   outerTimeBar = new PIXI.Graphics();
-  outerTimeBar.beginFill(0xFF0000);
+  outerTimeBar.beginFill(0x2d6a37);
   outerTimeBar.drawRect(0, 130, 160, 32);
   outerTimeBar.endFill();
   timeBar.addChild(outerTimeBar);
@@ -103,15 +97,15 @@ function setup() {
   background.endFill();
   splashScene.addChild(background);
 
-  splashText = new PIXI.Text('Very small \n adventure', { fontFamily: "gbfont", fontSize: 12, fill: 0xffffff, align: 'left' });
+  splashText = new PIXI.Text('Very small \n adventure', { fontFamily: "gbfont", fontSize: 12, fill: 0x060f08, align: 'left' });
   splashScene.addChild(splashText);
-  splashText.tint='0x222222';
+  splashText.tint='060f08';
   splashText.x = 12;
   splashText.y = 64;
 
-  splashText = new PIXI.Text('Press \'a\' to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
+  splashText = new PIXI.Text('Press \'a\' to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
   splashScene.addChild(splashText);
-  splashText.tint='0x222222';
+  splashText.tint='0x060f08';
   splashText.x = 12;
   splashText.y = 96;
 
@@ -122,21 +116,21 @@ function setup() {
   background.endFill();
   gameOverScene.addChild(background);
 
-  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0xffffff, align: 'left' });
+  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
   gameOverScene.addChild(gameOverText);
-  gameOverText.tint='0x222222';
+  gameOverText.tint='0x060f08';
   gameOverText.x = 12;
   gameOverText.y = 64;
 
-  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
+  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
   gameOverScene.addChild(gameOverTextCaption);
-  gameOverTextCaption.tint='0x222222';
+  gameOverTextCaption.tint='0x060f08';
   gameOverTextCaption.x = 12;
   gameOverTextCaption.y = 96;
 
   //Set the game state
   state = splash;
-
+reset();
   //Start the game loop 
   app.ticker.add(delta => gameLoop(delta));
 }
@@ -153,7 +147,7 @@ function gameLoop(delta) {
 }
 
 function switcher() {
-  key_uno.isDown ? u.shake(player, 15, false)  : null;
+  // key_uno.isDown ? u.shake(player, 15, false)  : null;
   key_dos.isDown ? console.log("p"): null;
   // key_cuatro.isDown ? gameOver() : null;
 }

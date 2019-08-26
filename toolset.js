@@ -8,7 +8,7 @@ function checkIfTimeOver() {
 
 function decreaseLife() {
   hp -= 20;
-  player.tint = '0xff000';
+  player.tint = '0x000000';
   // explosion.play(); 
 }
 
