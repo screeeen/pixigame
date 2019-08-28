@@ -19,7 +19,8 @@ let Application = PIXI.Application,
   resources = PIXI.loader.resources,
   Sprite = PIXI.Sprite,
   Container = PIXI.Container,
-  TextStyle = PIXI.TextStyle;
+  TextStyle = PIXI.TextStyle,
+  sound = PIXI.Sound;
 
 //Create a Pixi Application
 let app = new Application({
@@ -36,19 +37,20 @@ document.body.appendChild(app.view);
 // let u = new SpriteUtilities(PIXI);
 let tile000, tile001, tile002, tile003, tile004, tile005, tile006, tile007, tile008, tile009, tex;
 let tilesCollision = [];
+let gameScene, interludeScene, gameOverScene, splashScene;
 let player, enter, exit, tile, tileC;
 const speed = 32;
 let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
 let background;
-let gameScene, interludeScene, gameOverScene, splashScene;
 let message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar;
 let timeBar, innerTimeBar, outerTimeBar;
 let roomCount,state;
 let iniTime;
 let timeDown;
+let boomSnd;
 
 
 

@@ -3,9 +3,10 @@
 //load an image and run the `setup` function when it's done
 loader
   .add("./sprites/tileset_desert.json")
+  // .add('explosion',"./explosion.wav")
   .on("progress", loadProgressHandler)
   .load(setup);
-  
+
 function loadProgressHandler(loader, resource) {
 }
 
@@ -13,25 +14,35 @@ function loadProgressHandler(loader, resource) {
 function setup() {
 
   roomCount = 0;
-  gameScene = new Container();
-  app.stage.addChild(gameScene);
-
-  interludeScene = new Container();
-  app.stage.addChild(interludeScene);
-
   splashScene = new Container();
   app.stage.addChild(splashScene);
-
-
+  gameScene = new Container();
+  app.stage.addChild(gameScene);
+  interludeScene = new Container();
+  app.stage.addChild(interludeScene);
   gameOverScene = new Container();
   app.stage.addChild(gameOverScene);
 
-  splashScene.visible = true;
-  interludeScene.visible = false;
-  gameScene.visible = false;
-  gameOverScene.visible = false;
+  //splash room
+  background = new PIXI.Graphics();
+  background.beginFill(0x62e678);
+  background.drawRect(0, 0, 160, 144);
+  background.endFill();
+  splashScene.addChild(background);
 
   tex = PIXI.loader.resources["./sprites/tileset_desert.json"].textures;
+
+//   boomSnd = PIXI.sound.sound.from({
+//     url: './explosion.wav',
+//     autoPlay: false,
+//     preload: true,
+//     loaded: function(err, sound) {
+//         sound.play();
+//     }
+// });
+
+const sound = PIXI.sound.Sound.from('./explosion.wav');
+sound.play();
 
   //health bar
   healthBar = new PIXI.Container();
@@ -40,13 +51,13 @@ function setup() {
 
   innerBar = new PIXI.Graphics();
   innerBar.beginFill(0x060f08);
-  innerBar.drawRect(0, 130, 80, 32,2);
+  innerBar.drawRect(0, 130, 80, 32, 2);
   innerBar.endFill();
   healthBar.addChild(innerBar);
 
   outerBar = new PIXI.Graphics();
   outerBar.beginFill(0x62e678);
-  outerBar.drawRect(0, 130, 80, 32,2);
+  outerBar.drawRect(0, 130, 80, 32, 2);
   outerBar.endFill();
   healthBar.addChild(outerBar);
 
@@ -90,13 +101,36 @@ function setup() {
   message.y = 64;
   interludeScene.addChild(message);
 
-  //splash room
+  //game over room
   background = new PIXI.Graphics();
   background.beginFill(0x62e678);
   background.drawRect(0, 0, 160, 144);
   background.endFill();
-  splashScene.addChild(background);
+  gameOverScene.addChild(background);
 
+  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
+  gameOverScene.addChild(gameOverText);
+  gameOverText.tint = '0x060f08';
+  gameOverText.x = 12;
+  gameOverText.y = 64;
+
+  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
+  gameOverScene.addChild(gameOverTextCaption);
+  gameOverTextCaption.tint = '0x060f08';
+  gameOverTextCaption.x = 12;
+  gameOverTextCaption.y = 96;
+
+  reset();
+
+  splashScene.visible = true;
+  interludeScene.visible = false;
+  gameScene.visible = false;
+  gameOverScene.visible = false;
+
+  //Set the game state
+  state = splash;
+
+   
   splashText = new PIXI.Text('Very small \n adventure', { fontFamily: "gbfont", fontSize: 12, fill: 0x060f08, align: 'left' });
   splashScene.addChild(splashText);
   splashText.tint='060f08';
@@ -109,28 +143,6 @@ function setup() {
   splashText.x = 12;
   splashText.y = 96;
 
-  //game over room
-  background = new PIXI.Graphics();
-  background.beginFill(0x62e678);
-  background.drawRect(0, 0, 160, 144);
-  background.endFill();
-  gameOverScene.addChild(background);
-
-  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
-  gameOverScene.addChild(gameOverText);
-  gameOverText.tint='0x060f08';
-  gameOverText.x = 12;
-  gameOverText.y = 64;
-
-  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
-  gameOverScene.addChild(gameOverTextCaption);
-  gameOverTextCaption.tint='0x060f08';
-  gameOverTextCaption.x = 12;
-  gameOverTextCaption.y = 96;
-
-  //Set the game state
-  state = splash;
-reset();
   //Start the game loop 
   app.ticker.add(delta => gameLoop(delta));
 }
@@ -147,8 +159,8 @@ function gameLoop(delta) {
 }
 
 function switcher() {
-  // key_uno.isDown ? u.shake(player, 15, false)  : null;
-  key_dos.isDown ? console.log("p"): null;
+  key_uno.isDown ? boomSnd.play('explosion.wav', 0.5, false): null;
+  key_dos.isDown ? console.log("p") : null;
   // key_cuatro.isDown ? gameOver() : null;
 }
 
@@ -220,9 +232,9 @@ function reNewRoom() {
   }
 }
 
-function stopWatch(){
+function stopWatch() {
 
-  const intervalId = setInterval(function() {
+  const intervalId = setInterval(function () {
     timeDown--;
     if (timeDown < 0) {
       clearInterval(intervalId);
@@ -236,18 +248,18 @@ function stopWatch(){
 //     timeDown--;
 //     if (a_key.isDown < 0) {
 //       clearInterval(intervalId);
-      
+
 //     }
 //   }, blinking_time);
 // }
-  
+
 
 
 
 // function animate(time) {
 //     ticker.update(time);
 //     console.log(time);
-    
+
 //     // renderer.render(stage);
 //     requestAnimationFrame(animate);
 // }
