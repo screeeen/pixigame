@@ -3,14 +3,25 @@
 <head>
   <meta charset="utf-8">
   <title>very small adventure</title>
-</head>
-  <script src="./pixi/pixi.min.js"></script>
-<body>
+  <link rel=”preload” href='./sprites/gbfont.ttf' as=”font” type=”font/ttf" crossorigin="anonymous">
+  <link rel=”preload” href='../fontjs/Font.js' as=”script”>
+  <link rel="preload" href="./pixi-sound.js" as="script">
+  <link rel="preload" href="./input.js" as="script">
+  <link rel="preload" href="./globalVars.js" as="script">
+  <link rel="preload" href="./reset.js" as="script">
+  <link rel="preload" href="./toolset.js" as="script">
+  <link rel="preload" href="./play.js" as="script">
+  <link rel="preload" href="./main.js" as="script">
+  <link rel="preload" href="./pixi/pixi.min.js" as="script">
   <style>
   @font-face {
-  font-family: "gbfont";
-  src: url('./sprites/gbfont.ttf') format("truetype")
-}</style>
+      font-family: "gbfont";
+      src: url('./sprites/gbfont.ttf') format("truetype") 
+}
+</style>
+</head>
+<body>
+  <script src="./pixi/pixi.min.js"></script>
   <script type="text/javascript">
     let type = "WebGL"
     if(!PIXI.utils.isWebGLSupported()){
@@ -19,10 +30,10 @@
 
     PIXI.utils.sayHello(type)
   </script>
+  <script src="./fontjs/Font.js"></script>
   <script src="./pixi-sound.js"></script>
   <script src="./input.js"></script>
   <script src="./globalVars.js"></script>
-  <script src="./fontjs/Font.js"></script>
   <script src="./reset.js"></script>
   <script src="./toolset.js"></script>
   <script src="./play.js"></script>

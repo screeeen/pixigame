@@ -1,7 +1,7 @@
 
 
 function checkIfTimeOver() {
-  if (timeDown < 1) {
+  if (TIME_DOWN < 1) {
     gameOver();
   }
 }
@@ -17,7 +17,7 @@ function updateHPBar() {
 }
 
 function updateTimeBar() {
-  outerTimeBar.width = timeDown * 8;
+  outerTimeBar.width = TIME_DOWN * 8;
 
 }
 

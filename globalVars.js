@@ -48,8 +48,7 @@ let message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar;
 let timeBar, innerTimeBar, outerTimeBar;
 let roomCount,state;
-let iniTime;
-let timeDown;
+let TIME_DOWN;
 let boomSnd;
 
 

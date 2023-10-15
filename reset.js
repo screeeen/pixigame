@@ -2,7 +2,7 @@ function reset() {
   tilesCollision = [];
   
   time = 1000;
-  timeDown = 10;
+  TIME_DOWN = 12;
   stopWatch();
 
   //tilemap
