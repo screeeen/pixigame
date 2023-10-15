@@ -14,20 +14,16 @@ function loadProgressHandler(loader, resource) {
 function setup() {
 
   roomCount = 0;
+
   splashScene = new Container();
   app.stage.addChild(splashScene);
   
-  //splash room
-  background = new PIXI.Graphics();
-  background.beginFill(0x62e678);
-  background.drawRect(0, 0, 160, 144);
-  background.endFill();
-  splashScene.addChild(background);
-
   gameScene = new Container();
   app.stage.addChild(gameScene);
+
   interludeScene = new Container();
   app.stage.addChild(interludeScene);
+
   gameOverScene = new Container();
   app.stage.addChild(gameOverScene);
   
@@ -83,52 +79,19 @@ function setup() {
   messageTimeBar.y = 130;
   gameScene.addChild(messageTimeBar);
 
+  scenes = [gameScene, interludeScene, gameOverScene, splashScene];
 
-  //interlude room
-  message = new PIXI.Text('Day: ' + roomCount, { fontFamily: 'gbfont', fontSize: 10, fill: 0xffffff, align: 'center' });
-  message.x = 12;
-  message.y = 64;
-  interludeScene.addChild(message);
-
-  //game over room
-  background = new PIXI.Graphics();
-  background.beginFill(0x62e678);
-  background.drawRect(0, 0, 160, 144);
-  background.endFill();
-  gameOverScene.addChild(background);
-
-  gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
-  gameOverScene.addChild(gameOverText);
-  gameOverText.tint = '0x060f08';
-  gameOverText.x = 12;
-  gameOverText.y = 64;
-
-  gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 6, fill: 0x060f08, align: 'left' });
-  gameOverScene.addChild(gameOverTextCaption);
-  gameOverTextCaption.tint = '0x060f08';
-  gameOverTextCaption.x = 12;
-  gameOverTextCaption.y = 96;
-
-  splashText = new PIXI.Text('Very small adventure', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
-  splashScene.addChild(splashText);
-  splashText.tint='060f08';
-  splashText.x = 12;
-  splashText.y = 64;
-
-  splashText = new PIXI.Text('Press \'a\' to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
-  splashScene.addChild(splashText);
-  splashText.tint='0x060f08';
-  splashText.x = 12;
-  splashText.y = 96;
+    //interlude room
+    message = new PIXI.Text('Day: ' + roomCount, { fontFamily: 'gbfont', fontSize: 10, fill: 0xffffff, align: 'center' });
+    message.x = 12;
+    message.y = 64;
+    interludeScene.addChild(message);
   
   reset();
 
-  splashScene.visible = true;
-  interludeScene.visible = false;
-  gameScene.visible = false;
-  gameOverScene.visible = false;
+  setRoomVisible(splashScene)
 
-  //Set the game state
+  // run the game state
   state = splash;
   
   //Start the game loop 
@@ -139,20 +102,32 @@ function gameLoop(delta) {
   //Update the current game state:
   state(delta);
 
-  // switcher(); // TOOL
-
   if (rightArrow.isUp && leftArrow.isUp && upArrow.isUp && downArrow.isUp && a_key.isUp) {
     canMove = true;
   }
 }
 
-// function switcher() {
-//   key_uno.isDown ? boomSnd.play('explosion.wav', 0.5, false): null;
-//   key_dos.isDown ? console.log("p") : null;
-//   // key_cuatro.isDown ? gameOver() : null;
-// }
 
 function splash() {
+  //splash room
+  background = new PIXI.Graphics();
+  background.beginFill(0x62e678);
+  background.drawRect(0, 0, 160, 144);
+  background.endFill();
+  splashScene.addChild(background);
+
+  splashText = new PIXI.Text('Very\nsmall\nadventure', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
+  splashScene.addChild(splashText);
+  splashText.tint='060f08';
+  splashText.x = 12;
+  splashText.y = 44;
+
+  splashText = new PIXI.Text('Press \'a\' to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
+  splashScene.addChild(splashText);
+  splashText.tint='0x060f08';
+  splashText.x = 12;
+  splashText.y = 96;
+
   if (a_key.isDown && canMove) {
     canMove = false;
     startGame();
@@ -160,9 +135,11 @@ function splash() {
 }
 
 function interlude() {
+
+    
   if (a_key.isDown && canMove) {
     canMove = false;
-    reNewRoom();
+    reNewRoom(INTERLUDE);
   }
 }
 
@@ -172,47 +149,56 @@ function startGame() {
   updateHPBar();
   roomCount = 0;
   state = play;
-  interludeScene.visible = false;
-  gameOverScene.visible = false;
-  splashScene.visible = false;
-  gameScene.visible = true;
+  setRoomVisible(gameScene)
 }
 
 function gameOver() {
-  state = gameOver;
-  interludeScene.visible = false;
-  gameOverScene.visible = true;
-  splashScene.visible = false;
-  gameScene.visible = false;
-  if (a_key.isDown && canMove) {
-    canMove = false;
-    reNewRoom();
-  }
+    //game over room
+    background = new PIXI.Graphics();
+    background.beginFill(0x62e678);
+    background.drawRect(0, 0, 160, 144);
+    background.endFill();
+    gameOverScene.addChild(background);
+  
+    gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
+    gameOverScene.addChild(gameOverText);
+    gameOverText.tint = '0x060f08';
+    gameOverText.x = 12;
+    gameOverText.y = 64;
+  
+    gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 6, fill: 0x060f08, align: 'left' });
+    gameOverScene.addChild(gameOverTextCaption);
+    gameOverTextCaption.tint = '0x060f08';
+    gameOverTextCaption.x = 12;
+    gameOverTextCaption.y = 96;
+
+    state = gameOver;
+    setRoomVisible(gameOverScene)
+    if (a_key.isDown && canMove) {
+      canMove = false;
+      reNewRoom(GAME_OVER);
+    }
 }
 
-function reNewRoom() {
-  switch (state.name) {
-    case ("play"):
+function setRoomVisible (room) {
+  scenes.forEach(scene => scene === room ? scene.visible = true : scene.visible = false)
+}
+
+function reNewRoom(stateName) {
+  switch (stateName) {
+    case (PLAY):
       updateRoomCount()
       state = interlude;
-      // ticker.stop();
-      interludeScene.visible = true;
-      gameOverScene.visible = false;
-      gameScene.visible = false;
+      setRoomVisible(interludeScene)
       break;
-    case ("interlude"):
+    case (INTERLUDE):
       reset();
       state = play;
-      interludeScene.visible = false;
-      gameOverScene.visible = false;
-      gameScene.visible = true;
+      setRoomVisible(gameScene)
       break;
-    case ("gameOver"):
+    case (GAME_OVER):
       state = splash;
-      interludeScene.visible = false;
-      gameOverScene.visible = false;
-      gameScene.visible = false;
-      splashScene.visible = true
+      setRoomVisible(splashScene)
       break;
 
   }

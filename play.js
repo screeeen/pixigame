@@ -11,7 +11,7 @@ function play(delta) {
       updateHPBar();
       checkHP();
     }
-    if (hitTestRectangle(player, exit)) reNewRoom();
+    if (hitTestRectangle(player, exit)) reNewRoom(PLAY);
   }
 
   if (leftArrow.isDown && canMove && player.x > 0) {
@@ -22,7 +22,7 @@ function play(delta) {
       updateHPBar();
       checkHP();
     }
-    if (hitTestRectangle(player, exit)) reNewRoom();
+    if (hitTestRectangle(player, exit)) reNewRoom(PLAY);
   }
 
   if (upArrow.isDown && canMove && player.y > 0) {
@@ -33,7 +33,7 @@ function play(delta) {
       updateHPBar();
       checkHP();
     }
-    if (hitTestRectangle(player, exit)) reNewRoom();
+    if (hitTestRectangle(player, exit)) reNewRoom(PLAY);
   }
 
   if (downArrow.isDown && canMove && player.y < HEIGHT - 32) {
@@ -44,7 +44,7 @@ function play(delta) {
       updateHPBar();
       checkHP();
     }
-    if (hitTestRectangle(player, exit)) reNewRoom();
+    if (hitTestRectangle(player, exit)) reNewRoom(PLAY);
   }
 
 }
