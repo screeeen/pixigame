@@ -86,6 +86,11 @@ function setup() {
     message.x = 12;
     message.y = 64;
     interludeScene.addChild(message);
+
+    pressKeyText = new PIXI.Text('Press \'a\'\nto continue', { fontFamily: 'gbfont', fontSize: 8, fill: 0xffffff, align: 'left' });
+    pressKeyText.x = 12;
+    pressKeyText.y = 116;
+    interludeScene.addChild(pressKeyText);
   
   reset();
 
@@ -96,6 +101,15 @@ function setup() {
   
   //Start the game loop 
   app.ticker.add(delta => gameLoop(delta));
+}
+
+function startGame() {
+  reset();
+  hp = 80;
+  updateHPBar();
+  roomCount = 0;
+  state = play;
+  setRoomVisible(gameScene)
 }
 
 function gameLoop(delta) {
@@ -122,11 +136,16 @@ function splash() {
   splashText.x = 12;
   splashText.y = 44;
 
-  splashText = new PIXI.Text('Press \'a\' to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
-  splashScene.addChild(splashText);
-  splashText.tint='0x060f08';
+  
+  splashText = new PIXI.Text('Arrows to move', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'right' });
   splashText.x = 12;
-  splashText.y = 96;
+  splashText.y = 116;
+  splashScene.addChild(splashText);
+
+  splashText = new PIXI.Text('Press \'a\'to start', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
+  splashText.x = 12;
+  splashText.y = 126;
+  splashScene.addChild(splashText);
 
   if (a_key.isDown && canMove) {
     canMove = false;
@@ -134,22 +153,11 @@ function splash() {
   }
 }
 
-function interlude() {
-
-    
+function interlude() {    
   if (a_key.isDown && canMove) {
     canMove = false;
     reNewRoom(INTERLUDE);
   }
-}
-
-function startGame() {
-  reset();
-  hp = 80;
-  updateHPBar();
-  roomCount = 0;
-  state = play;
-  setRoomVisible(gameScene)
 }
 
 function gameOver() {
@@ -162,15 +170,18 @@ function gameOver() {
   
     gameOverText = new PIXI.Text('GAME OVER', { fontFamily: 'gbfont', fontSize: 12, fill: 0x060f08, align: 'left' });
     gameOverScene.addChild(gameOverText);
-    gameOverText.tint = '0x060f08';
     gameOverText.x = 12;
     gameOverText.y = 64;
   
     gameOverTextCaption = new PIXI.Text('You survived ' + roomCount + ' Days.', { fontFamily: 'gbfont', fontSize: 6, fill: 0x060f08, align: 'left' });
-    gameOverScene.addChild(gameOverTextCaption);
-    gameOverTextCaption.tint = '0x060f08';
+    gameOverScene.addChild(gameOverTextCaption);    
     gameOverTextCaption.x = 12;
     gameOverTextCaption.y = 96;
+
+    pressKeyText = new PIXI.Text('Press \'a\'\nto continue', { fontFamily: 'gbfont', fontSize: 8, fill: 0x060f08, align: 'left' });
+    pressKeyText.x = 12;
+    pressKeyText.y = 116;
+    gameOverScene.addChild(pressKeyText);
 
     state = gameOver;
     setRoomVisible(gameOverScene)

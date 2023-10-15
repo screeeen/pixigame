@@ -45,7 +45,7 @@ let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
 let background;
-let message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
+let message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp, pressKeyText;
 let healthBar, innerBar, outerBar;
 let timeBar, innerTimeBar, outerTimeBar;
 let roomCount,state;
