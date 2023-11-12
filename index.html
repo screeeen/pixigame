@@ -1,32 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>very small adventure</title>
-</head>
-  <script src="./pixi/pixi.min.js"></script>
-<body>
-  <style>
-  @font-face {
-  font-family: "gbfont";
-  src: url('./sprites/gbfont.ttf') format("truetype")
-}</style>
-  <script type="text/javascript">
-    let type = "WebGL"
-    if(!PIXI.utils.isWebGLSupported()){
-      type = "canvas"
-    }
+	<head>
+		<meta charset="utf-8" />
+		<title>very small adventure</title>
+	</head>
+	<script src="./pixi/pixi.min.js"></script>
+	<body>
+		<style>
+			@font-face {
+				font-family: 'gbfont';
+				src: url('./sprites/gbfont.ttf') format('truetype');
+			}
+		</style>
+		<script type="text/javascript">
+			let type = 'WebGL';
+			if (!PIXI.utils.isWebGLSupported()) {
+				type = 'canvas';
+			}
 
-    PIXI.utils.sayHello(type)
-  </script>
-  <script src="./pixi-sound.js"></script>
-  <script src="./input.js"></script>
-  <script src="./globalVars.js"></script>
-  <script src="./fontjs/Font.js"></script>
-  <script src="./reset.js"></script>
-  <script src="./toolset.js"></script>
-  <script src="./play.js"></script>
-  <script src="./main.js"></script>
-
-</body>
+			PIXI.utils.sayHello(type);
+		</script>
+		<script src="./pixi-sound.js"></script>
+		<script src="./input.js"></script>
+		<script src="./globalVars.js"></script>
+		<script src="./reset.js"></script>
+		<script src="./fontjs/Font.js"></script>
+		<script src="./toolset.js"></script>
+		<script src="./play.js"></script>
+		<script src="./main.js"></script>
+	</body>
 </html>

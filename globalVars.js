@@ -1,4 +1,3 @@
-
 const leftArrow = keyboard(37);
 const upArrow = keyboard(38);
 const rightArrow = keyboard(39);
@@ -12,25 +11,23 @@ const key_dos = keyboard(51);
 const key_tres = keyboard(52);
 const key_cuatro = keyboard(53);
 
-
 //Aliases
 let Application = PIXI.Application,
-  loader = PIXI.loader,
-  resources = PIXI.loader.resources,
-  Sprite = PIXI.Sprite,
-  Container = PIXI.Container,
-  TextStyle = PIXI.TextStyle,
-  sound = PIXI.Sound;
+	loader = PIXI.loader,
+	resources = PIXI.loader.resources,
+	Sprite = PIXI.Sprite,
+	Container = PIXI.Container,
+	TextStyle = PIXI.TextStyle,
+	sound = PIXI.Sound;
 
 //Create a Pixi Application
 let app = new Application({
-  width: 160,
-  height: 144,
-  antialias: true,
-  transparent: false,
-  resolution: 2
-}
-);
+	width: 160,
+	height: 144,
+	antialias: true,
+	transparent: false,
+	resolution: 2,
+});
 //Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
@@ -44,14 +41,9 @@ let canMove = true;
 const WIDTH = 160;
 const HEIGHT = 128;
 let background;
-let message,messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
+let message, messageTimeBar, gameOverTextCaption, splashText, gameOverText, hp;
 let healthBar, innerBar, outerBar;
 let timeBar, innerTimeBar, outerTimeBar;
-let roomCount,state;
-let iniTime;
+let roomCount, state;
 let timeDown;
 let boomSnd;
-
-
-
-
